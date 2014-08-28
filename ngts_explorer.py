@@ -4,6 +4,9 @@ from collections import defaultdict, namedtuple
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import logging
+
+__all__ = ['NGTSExplorer']
 
 FileData = namedtuple('FileData', ['mjd', 'flux', 'fluxerr',
                                    'airmass'])
@@ -106,3 +109,54 @@ def savefig(ob_name, ob_class, outdir='objects'):
 
     plt.savefig(os.path.join(full_out_path, '{name}.png'.format(name=ob_name)),
                 bbox_inches='tight')
+
+class NGTSExplorer(object):
+    def __init__(self, match_file, data_file):
+        self.match_file = match_file
+        self.data_file = data_file
+        self.name = None
+        self.i = None
+        self.obclass = None
+
+    def load_data(self):
+        self.mapping = build_object_type_mapping(self.match_file)
+        self.data = extract_data(self.data_file)
+        return self
+
+    def keys(self):
+        return self.mapping.keys()
+
+    def set_object(self, obclass, index=0):
+        self.name, self.i = self.mapping[obclass][index]
+        self.obclass = obclass
+        return self
+
+    def plot(self, detrend_data=False):
+        return self.plot_index(self.i, detrend_data)
+
+    def plot_index(self, index, detrend_data=False):
+        plot_index(self.data, index, detrend_data)
+        if self.name and self.obclass:
+            title = '{name} ({obclass})'.format(
+                name=self.name,
+                obclass=self.obclass
+            )
+            plt.title(title)
+            plt.tight_layout()
+        return self
+
+    def savefig_index(self, ob_name, ob_class, outdir='objects'):
+        savefig(ob_name, ob_class, outdir)
+        return self
+
+    def savefig(self, outdir='objects'):
+        if not plt.get_fignums():
+            raise RuntimeError("Please show the plot window with #plot")
+
+        if self.name is None or self.obclass is None:
+            msg = """Please either use #savefig_index or set the object index
+            using #set_object before calling this method"""
+            raise RuntimeError(msg)
+
+        self.savefig_index(self.name, self.obclass, outdir=outdir)
+        return self
