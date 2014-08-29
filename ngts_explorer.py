@@ -160,3 +160,12 @@ class NGTSExplorer(object):
 
         self.savefig_index(self.name, self.obclass, outdir=outdir)
         return self
+
+    def plot_all(self, obclass, detrend_data=False):
+        nobjects = len(self.mapping[obclass])
+
+        for i in xrange(nobjects):
+            self.set_object(obclass, index=i).plot(detrend_data=detrend_data)
+
+    def __getattr__(self, obclass):
+        self.plot_all(obclass, detrend_data=False)
