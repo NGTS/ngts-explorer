@@ -4,12 +4,24 @@ from collections import defaultdict, namedtuple
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+from contextlib import contextmanager
 import logging
+from socket import gethostname
 
 __all__ = ['NGTSExplorer']
 
 FileData = namedtuple('FileData', ['mjd', 'flux', 'fluxerr',
                                    'airmass'])
+
+@contextmanager
+def connect_to_database():
+    if gethostname() in ['mbp.local', 'mbp.lan']:
+        host = 'localhost'
+    else:
+        host = 'ngtsdb'
+
+    with pymysql.connect(user='sw', host=host, db='swdb') as cursor:
+        yield cursor
 
 def correct_for_airmass(flux, fluxerr, airmass):
     imag_err = 1.08 * fluxerr / flux
@@ -39,7 +51,7 @@ def build_object_type_mapping(fname):
 
 def fetch_airmass(image_ids):
     image_ids = map(long, image_ids)
-    with pymysql.connect(user='sw', db='swdb') as cursor:
+    with connect_to_database() as cursor:
         cursor.execute('''select image_id, airmass from headers
                        where image_id in %s''', (image_ids,))
         airmass_mapping = { image_id: airmass
