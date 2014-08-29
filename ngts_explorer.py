@@ -59,29 +59,24 @@ def fetch_airmass(image_ids):
 
     return np.array([airmass_mapping[i] for i in image_ids])
 
-def extract_data(fname):
+def extract_data(fname, index):
+    file_index = index - 1
     with fitsio.FITS(fname) as infile:
         imagelist = infile['imagelist']
         image_id = imagelist['image_id'].read()
         mjd = imagelist['tmid'].read()
 
-        flux = infile['flux'].read()
-        fluxerr = infile['fluxerr'].read()
+        flux = infile['flux'][file_index:file_index+1, :].flatten()
+        fluxerr = infile['fluxerr'][file_index:file_index+1, :].flatten()
 
     ind = np.argsort(mjd)
-    mjd, image_id = [data[ind] for data in [mjd, image_id]]
-    flux, fluxerr = [data[:, ind] for data in [flux, fluxerr]]
+    mjd, image_id, flux, fluxerr = [data[ind] for data in [
+        mjd, image_id, flux, fluxerr]
+    ]
 
     airmass = fetch_airmass(image_id)
 
     return FileData(mjd, flux, fluxerr, airmass)
-
-def retrieve_object(file_data, index):
-    file_index = index - 1
-    lc = file_data.flux[file_index]
-    lcerr = file_data.fluxerr[file_index]
-
-    return FileData(file_data.mjd, lc, lcerr, file_data.airmass)
 
 
 def detrend(extracted_data):
@@ -91,8 +86,7 @@ def detrend(extracted_data):
 
     return FileData(extracted_data.mjd, mag, magerr, extracted_data.airmass)
 
-def plot_index(file_data, index, detrend_data=False):
-    o = retrieve_object(file_data, index)
+def plot_index(o, detrend_data=False):
     if detrend_data:
         d = detrend(o)
     else:
@@ -130,10 +124,7 @@ class NGTSExplorer(object):
         self.i = None
         self.obclass = None
 
-    def load_data(self):
         self.mapping = build_object_type_mapping(self.match_file)
-        self.data = extract_data(self.data_file)
-        return self
 
     def keys(self):
         return self.mapping.keys()
@@ -141,13 +132,14 @@ class NGTSExplorer(object):
     def set_object(self, obclass, index=0):
         self.name, self.i = self.mapping[obclass][index]
         self.obclass = obclass
+        self.data = extract_data(self.data_file, self.i)
         return self
 
     def plot(self, detrend_data=False):
-        return self.plot_index(self.i, detrend_data)
+        return self.plot_index(detrend_data)
 
-    def plot_index(self, index, detrend_data=False):
-        plot_index(self.data, index, detrend_data)
+    def plot_index(self, detrend_data=False):
+        plot_index(self.data, detrend_data)
         if self.name and self.obclass:
             title = '{name} ({obclass})'.format(
                 name=self.name,
