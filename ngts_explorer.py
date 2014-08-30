@@ -98,7 +98,6 @@ def plot_index(o, detrend_data=False):
     if detrend_data:
         plt.gca().invert_yaxis()
 
-    plt.xlabel(r'MJD - {}'.format(mjd0))
     if detrend_data:
         plt.ylabel(r'Magnitudes')
     else:
@@ -135,18 +134,28 @@ class NGTSExplorer(object):
         self.data = extract_data(self.data_file, self.i)
         return self
 
+    def mjd_label(self):
+        mjd0 = int(self.data.mjd.min())
+        return 'MJD - {}'.format(mjd0)
+
     def plot(self, detrend_data=False):
-        return self.plot_index(detrend_data)
+        self.plot_index(detrend_data)
+        plt.xlabel(self.mjd_label())
+        plt.tight_layout()
+        return self
 
     def plot_index(self, detrend_data=False):
-        plot_index(self.data, detrend_data)
+        self.plot_with_title(self.data, detrend_data)
+        return self
+
+    def plot_with_title(self, data, detrend_data=False):
+        plot_index(data, detrend_data)
         if self.name and self.obclass:
             title = '{name} ({obclass})'.format(
                 name=self.name,
                 obclass=self.obclass
             )
             plt.title(title)
-            plt.tight_layout()
         return self
 
     def savefig_index(self, ob_name, ob_class, outdir='objects'):
