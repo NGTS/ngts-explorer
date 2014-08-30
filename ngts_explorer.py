@@ -235,6 +235,3 @@ class NGTSExplorer(object):
 
         for i in xrange(nobjects):
             self.set_object(obclass, index=i).plot(detrend_data=detrend_data)
-
-    def __getattr__(self, obclass):
-        self.plot_all(obclass, detrend_data=False)
