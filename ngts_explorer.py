@@ -144,6 +144,18 @@ class NGTSExplorer(object):
         plt.tight_layout()
         return self
 
+    def plot_phase(self, period, epoch, mjd=True, detrend_data=False):
+        if not mjd:
+            epoch -= 2400000.5
+
+        phase = ((self.data.mjd - epoch) / period) % 1
+        new_data = FileData(phase, self.data.flux, self.data.fluxerr,
+                            self.data.airmass)
+        self.plot_with_title(new_data, detrend_data)
+        plt.xlabel(r'Orbital phase')
+        plt.tight_layout()
+        return self
+
     def plot_index(self, detrend_data=False):
         self.plot_with_title(self.data, detrend_data)
         return self
@@ -157,6 +169,7 @@ class NGTSExplorer(object):
             )
             plt.title(title)
         return self
+
 
     def savefig_index(self, ob_name, ob_class, outdir='objects'):
         savefig(ob_name, ob_class, outdir)
