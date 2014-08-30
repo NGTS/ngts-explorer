@@ -233,6 +233,8 @@ class NGTSExplorer(object):
 
     def plot_all(self, obclass, detrend_data=False):
         nobjects = len(self.mapping[obclass])
+        print("Plotting a total of {nobjects} objects".format(
+            nobjects=nobjects))
 
         for i in xrange(nobjects):
             print('Plotting object {i}'.format(i=i))
