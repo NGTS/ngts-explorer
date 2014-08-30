@@ -118,6 +118,10 @@ def plot_index(o, detrend_data=False):
 
     plt.tight_layout()
 
+def yes_or_no(query):
+    result = raw_input(query)
+    return result.lower().strip() in ['y', 'ye', 'yes']
+
 def savefig(ob_name, ob_class, outdir='objects'):
     full_out_path = os.path.join(
         outdir, ob_class
@@ -125,8 +129,12 @@ def savefig(ob_name, ob_class, outdir='objects'):
     if not os.path.isdir(full_out_path):
         os.makedirs(full_out_path)
 
-    plt.savefig(os.path.join(full_out_path, '{name}.png'.format(name=ob_name)),
-                bbox_inches='tight')
+    out_filename = os.path.join(full_out_path, '{name}.png'.format(name=ob_name))
+    if os.path.isfile(out_filename):
+        if yes_or_no(
+            'File \'{fname}\' exists, overwrite? [y/N] '.format(
+                fname=out_filename)):
+            plt.savefig(out_filename, bbox_inches='tight')
 
 class NGTSExplorer(object):
     def __init__(self, match_file, data_file):
