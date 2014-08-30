@@ -105,7 +105,8 @@ def plot_index(o, detrend_data=False):
         d = o
 
     mjd0 = int(d.mjd.min())
-    plt.errorbar(d.mjd - mjd0, d.flux, d.fluxerr, ls='None', marker='.')
+    plt.errorbar(d.mjd - mjd0, d.flux, d.fluxerr, ls='None', marker='.',
+                 capsize=0.)
 
     if detrend_data:
         plt.gca().invert_yaxis()
