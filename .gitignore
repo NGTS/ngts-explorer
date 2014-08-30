@@ -1,3 +1,4 @@
 *.fits
 objects
 *.pyc
+.DS_Store
