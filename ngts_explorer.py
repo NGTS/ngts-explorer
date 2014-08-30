@@ -147,6 +147,12 @@ class NGTSExplorer(object):
         self.data = extract_data(self.data_file, self.i)
         return self
 
+    def nobjects(self, obclass=None):
+        if obclass:
+            return len(self.mapping[obclass])
+        else:
+            return len(self.mapping[self.obclass])
+
     def mjd_label(self):
         mjd0 = int(self.data.mjd.min())
         return 'MJD - {}'.format(mjd0)
