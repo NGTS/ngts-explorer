@@ -39,8 +39,16 @@ def build_object_type_mapping(fname):
 
     mapping = defaultdict(list)
     for row in catalogue:
-        obj_id = row['MAIN_ID'].strip()
-        otype = row['OTYPE'].strip()
+        try:
+            obj_id = row['MAIN_ID'].strip()
+        except IndexError:
+            obj_id = row['main_id'].strip()
+
+        try:
+            otype = row['OTYPE'].strip()
+        except IndexError:
+            otype = row['otype'].strip()
+
         seq_no = row['Sequence_number']
         mapping[otype].append((
             obj_id,
