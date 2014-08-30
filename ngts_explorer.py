@@ -49,10 +49,14 @@ def build_object_type_mapping(fname):
         except IndexError:
             otype = row['otype'].strip()
 
+        vmag = row['V']
+        vmag = vmag if vmag == vmag else None
+
         seq_no = row['Sequence_number']
         mapping[otype].append((
             obj_id,
             long(row['Sequence_number']),
+            vmag,
         ))
 
     return mapping
@@ -130,6 +134,7 @@ class NGTSExplorer(object):
         self.name = None
         self.i = None
         self.obclass = None
+        self.vmag = None
 
         self.mapping = build_object_type_mapping(self.match_file)
 
@@ -137,7 +142,7 @@ class NGTSExplorer(object):
         return self.mapping.keys()
 
     def set_object(self, obclass, index=0):
-        self.name, self.i = self.mapping[obclass][index]
+        self.name, self.i, self.vmag = self.mapping[obclass][index]
         self.obclass = obclass
         self.data = extract_data(self.data_file, self.i)
         return self
@@ -184,11 +189,21 @@ class NGTSExplorer(object):
 
     def plot_with_title(self, data, detrend_data=False):
         plot_index(data, detrend_data)
+        title = None
         if self.name and self.obclass:
-            title = '{name} ({obclass})'.format(
-                name=self.name,
-                obclass=self.obclass
-            )
+            if self.vmag:
+                title = '{name} ({obclass}, V={vmag:.2f})'.format(
+                    name=self.name,
+                    obclass=self.obclass,
+                    vmag=self.vmag
+                )
+            else:
+                title = '{name} ({obclass})'.format(
+                    name=self.name,
+                    obclass=self.obclass,
+                )
+
+        if title:
             plt.title(title)
         return self
 
