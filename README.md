@@ -16,3 +16,4 @@ Coming soon!
   * perhaps add fuzzy searching
 * flesh out the way to plot all objects in a class and save chosen ones
   * perhaps some form of ui in which the user can save the image
+* Add ability to plot against phase, possibly `#plot_phase(period, epoch)`
