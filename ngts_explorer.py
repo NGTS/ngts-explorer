@@ -234,4 +234,7 @@ class NGTSExplorer(object):
         nobjects = len(self.mapping[obclass])
 
         for i in xrange(nobjects):
+            print('Plotting object {i}'.format(i=i))
             self.set_object(obclass, index=i).plot(detrend_data=detrend_data)
+            raw_input("Press enter to continue")
+            plt.close(plt.gcf())
