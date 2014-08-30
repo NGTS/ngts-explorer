@@ -144,13 +144,27 @@ class NGTSExplorer(object):
         plt.tight_layout()
         return self
 
-    def plot_phase(self, period, epoch, mjd=True, detrend_data=False):
+    def plot_phase(self, period, epoch, mjd=True, detrend_data=False,
+                   double_plot=True):
         if not mjd:
             epoch -= 2400000.5
 
         phase = ((self.data.mjd - epoch) / period) % 1
-        new_data = FileData(phase, self.data.flux, self.data.fluxerr,
-                            self.data.airmass)
+        ind = np.argsort(phase)
+        new_data = FileData(phase[ind],
+                            self.data.flux[ind],
+                            self.data.fluxerr[ind],
+                            self.data.airmass[ind]
+        )
+
+        if double_plot:
+            new_data = FileData(
+                np.concatenate([new_data.mjd, new_data.mjd + 1.]),
+                np.concatenate([new_data.flux, new_data.flux]),
+                np.concatenate([new_data.fluxerr, new_data.fluxerr]),
+                np.concatenate([new_data.airmass, new_data.airmass]),
+            )
+
         self.plot_with_title(new_data, detrend_data)
         plt.xlabel(r'Orbital phase')
         plt.tight_layout()
