@@ -7,6 +7,7 @@ import os
 from contextlib import contextmanager
 import logging
 from socket import gethostname
+from scipy import signal, stats
 
 __all__ = ['NGTSExplorer']
 
