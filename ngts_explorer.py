@@ -155,6 +155,9 @@ def compute_power_series(data, min_period, max_period, n=250):
                                freqs)
 
     return PowerSeries(periods, power)
+
+def plot_power_series(power_series):
+    plt.plot(power_series.period, power_series.power)
     
 
 class NGTSExplorer(object):
