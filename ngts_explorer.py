@@ -140,6 +140,15 @@ def savefig(ob_name, ob_class, outdir='objects'):
     else:
         plt.savefig(out_filename, bbox_inches='tight')
 
+def compute_power_series(data, min_period, max_period, n=250):
+    periods = np.linspace(min_period, max_period, n)
+    assert (periods > 0).all(), "Periods must be greater than 0"
+    freqs = 2. * np.pi / periods
+    power = signal.lombscargle(data.mjd, data.flux, freqs)
+
+    return PowerSeries(periods, power)
+    
+
 class NGTSExplorer(object):
     def __init__(self, match_file, data_file):
         self.match_file = match_file
