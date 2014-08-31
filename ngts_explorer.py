@@ -279,3 +279,14 @@ class NGTSExplorer(object):
             self.set_object(obclass, index=i).plot(detrend_data=detrend_data)
             raw_input("Press enter to continue")
             plt.close(plt.gcf())
+
+    def find_period(self, min_period=0.1, max_period=1., n=250, plot=True):
+        '''
+        Computes a lomb scargle periodogram to find the peak period. This
+        method returns a PowerSeries object with a `peak_period` property. This
+        can then be fed into `plot_phase` for plotting.
+        '''
+        ps = compute_power_series(self.data, min_period, max_period, n)
+        if plot:
+            plot_power_series(ps)
+        return ps
