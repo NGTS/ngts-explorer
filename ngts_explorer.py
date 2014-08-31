@@ -135,6 +135,8 @@ def savefig(ob_name, ob_class, outdir='objects'):
             'File \'{fname}\' exists, overwrite? [y/N] '.format(
                 fname=out_filename)):
             plt.savefig(out_filename, bbox_inches='tight')
+    else:
+        plt.savefig(out_filename, bbox_inches='tight')
 
 class NGTSExplorer(object):
     def __init__(self, match_file, data_file):
