@@ -172,7 +172,7 @@ class NGTSExplorer(object):
         plt.tight_layout()
         return self
 
-    def plot_phase(self, period, epoch, mjd=True, detrend_data=False,
+    def plot_phase(self, period, epoch=0., mjd=True, detrend_data=False,
                    double_plot=True):
         if not mjd:
             epoch -= 2400000.5
