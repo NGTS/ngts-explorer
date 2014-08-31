@@ -13,6 +13,7 @@ __all__ = ['NGTSExplorer']
 
 FileData = namedtuple('FileData', ['mjd', 'flux', 'fluxerr',
                                    'airmass'])
+PowerSeries = namedtuple('PowerSeries', ['period', 'power'])
 
 @contextmanager
 def connect_to_database():
