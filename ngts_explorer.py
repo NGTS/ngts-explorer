@@ -13,7 +13,11 @@ __all__ = ['NGTSExplorer']
 
 FileData = namedtuple('FileData', ['mjd', 'flux', 'fluxerr',
                                    'airmass'])
-PowerSeries = namedtuple('PowerSeries', ['period', 'power'])
+
+class PowerSeries(namedtuple('PowerSeriesBase', ['period', 'power'])):
+    @property
+    def peak_period(self):
+        return self.period[self.power == self.power.max()][0]
 
 @contextmanager
 def connect_to_database():
