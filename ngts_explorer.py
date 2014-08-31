@@ -154,6 +154,9 @@ class NGTSExplorer(object):
         self.name, self.i, self.vmag = self.mapping[obclass][index]
         self.obclass = obclass
         self.data = extract_data(self.data_file, self.i)
+        print('{n:d} {obclass} objects'.format(
+            n=self.nobjects(self.obclass),
+            obclass=self.obclass))
         return self
 
     def nobjects(self, obclass=None):
