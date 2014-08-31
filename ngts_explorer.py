@@ -144,7 +144,11 @@ def compute_power_series(data, min_period, max_period, n=250):
     periods = np.linspace(min_period, max_period, n)
     assert (periods > 0).all(), "Periods must be greater than 0"
     freqs = 2. * np.pi / periods
-    power = signal.lombscargle(data.mjd, data.flux, freqs)
+
+    med_flux = np.median(data.flux)
+    power = signal.lombscargle(data.mjd.astype(float),
+                               (data.flux - med_flux).astype(float),
+                               freqs)
 
     return PowerSeries(periods, power)
     
