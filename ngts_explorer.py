@@ -158,6 +158,9 @@ def compute_power_series(data, min_period, max_period, n=250):
 
 def plot_power_series(power_series):
     plt.plot(power_series.period, power_series.power)
+    plt.xlabel(r'Period / d')
+    plt.ylabel('Power')
+    plt.tight_layout()
     
 
 class NGTSExplorer(object):
