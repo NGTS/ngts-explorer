@@ -29,6 +29,9 @@ def connect_to_database():
     with pymysql.connect(user='sw', host=host, db='swdb') as cursor:
         yield cursor
 
+def sin_fn(x, amp, period, epoch, const):
+    return amp * np.sin(2. * np.pi * x / period - epoch) + const
+
 def correct_for_airmass(flux, fluxerr, airmass):
     imag_err = 1.08 * fluxerr / flux
     imag = -2.5 * np.log10(flux)
