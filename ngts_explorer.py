@@ -21,7 +21,7 @@ class PowerSeries(namedtuple('PowerSeriesBase', ['period', 'power'])):
 
 @contextmanager
 def connect_to_database():
-    if gethostname() in ['mbp.local', 'mbp.lan']:
+    if gethostname() in ['mbp.local', 'mbp.lan', 'mbp15.local', 'mbp15.lan']:
         host = 'localhost'
     else:
         host = 'ngtsdb'
