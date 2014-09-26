@@ -1,6 +1,6 @@
-# Interesting lightcurves
+# NGTS Explorer
 
-Anders has asked for some nice lightcurves to use for a poster. Try and find some nice objects to get lightcurves of
+For exploring NGTS data by picking out known interesting objects from SIMBAD and plotting. This code allows for nice lightcurves to be generated and interesting features to be found.
 
 ## Usage
 
