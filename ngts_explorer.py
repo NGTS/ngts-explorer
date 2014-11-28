@@ -298,3 +298,57 @@ class NGTSExplorer(object):
         if plot:
             plot_power_series(ps)
         return ps
+
+def launch_interpreter():
+    header = '''== NGTS Explorer
+
+Explore NGTS data.
+
+The `NGTSExplorer` class is created with a crossmatch file and data file with lightcurves:
+
+>>> n = NGTSExplorer('match.fits', 'data.fits')
+
+=== Plotting
+
+Lightcurves can be plotted against mjd with `#plot`, or in phase with `#plot_phase(period)`. Both
+methods take a `detrend_data` boolean argument and remove airmass trends.
+
+=== Period finding
+
+Periods can be found with `NGTSExplorer#find_period`. This plots and computes a Lomb-Scargle
+periodogram and returns a `PowerSeries` object, with a `peak_period` property. This can then easily
+be used with `#plot_phase`:
+
+>>> p = n.find_period()
+>>> n.plot_phase(p.peak_period)
+
+=== Choosing an object
+
+`NGTSExplorer#keys` contains the unique SIMBAD object classes, and an object is chosen with
+`#set_object(key, index=0)`.
+    '''
+    import IPython
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--match', required=False)
+    parser.add_argument('--data', required=False)
+    args = parser.parse_args()
+
+    if args.match is not None and args.data is not None:
+        n = NGTSExplorer(args.match, args.data)
+        header += '''
+----
+
+Data has been loaded into the n object which is an `NGTSExplorer` instance
+
+Available object classes: {classes}
+        '''.format(
+            classes=n.keys(),
+        )
+
+    plt.ion()
+    IPython.embed(banner1='', header=header)
+
+if __name__ == '__main__':
+    launch_interpreter()
