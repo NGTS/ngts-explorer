@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import pymysql
 import fitsio
 from collections import defaultdict, namedtuple
