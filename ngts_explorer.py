@@ -4,13 +4,15 @@
 import pymysql
 import fitsio
 from collections import defaultdict, namedtuple
-import numpy as np
-import matplotlib.pyplot as plt
+from pylab import *
 import os
 from contextlib import contextmanager
 import logging
 from socket import gethostname
 from scipy import signal, stats
+import seaborn as sns
+
+sns.set(rc={'lines.markeredgewidth': 0.01})
 
 __all__ = ['NGTSExplorer']
 
