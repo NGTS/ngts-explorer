@@ -2,6 +2,32 @@
 
 For exploring NGTS data by picking out known interesting objects from SIMBAD and plotting. This code allows for nice lightcurves to be generated and interesting features to be found.
 
+## Requirements
+
+The program requires the following python packages:
+
+* `ipython`
+* `scipy`
+* `matplotlib`
+* `numpy`
+* `fitsio`
+* `pymysql`
+* `seaborn`
+
+I recommend the [anaconda python distribution](http://continuum.io/downloads). `fitsio` and `pymysql` are installed using `pip`:
+
+``` sh
+pip install fitsio pymysql
+```
+
+The others can be installed with `conda`:
+
+``` sh
+conda install --yes ipython scipy matplotlib numpy seaborn
+```
+
+Currently it uses a connection to a mysql database which may not be available. The code will therefore not run but can be read.
+
 ## Usage
 
 Coming soon!
