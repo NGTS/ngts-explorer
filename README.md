@@ -30,7 +30,40 @@ Currently it uses a connection to a mysql database which may not be available. T
 
 ## Usage
 
-Coming soon!
+The main script `ngts_explorer.py` is run as a standalone script: `python ngts_explorer.py` which sets up the IPython environment.
+
+Optionally the arguments `--match` and `--data` refering to the [simbad](http://simbad.u-strasbg.fr/simbad/) crossmatched file, and NGTS photometry respectively will set up the `NGTSExplorer` object and load it as `n` into the namespace.
+
+Either method prints some help text to the console to get you started:
+
+```
+== NGTS Explorer
+
+Explore NGTS data.
+
+The `NGTSExplorer` class is created with a crossmatch file and data file with lightcurves:
+
+>>> n = NGTSExplorer('match.fits', 'data.fits')
+
+=== Plotting
+
+Lightcurves can be plotted against mjd with `#plot`, or in phase with `#plot_phase(period)`. Both
+methods take a `detrend_data` boolean argument and remove airmass trends.
+
+=== Period finding
+
+Periods can be found with `NGTSExplorer#find_period`. This plots and computes a Lomb-Scargle
+periodogram and returns a `PowerSeries` object, with a `peak_period` property. This can then easily
+be used with `#plot_phase`:
+
+>>> p = n.find_period()
+>>> n.plot_phase(p.peak_period)
+
+=== Choosing an object
+
+`NGTSExplorer#keys` contains the unique SIMBAD object classes, and an object is chosen with
+`#set_object(key, index=0)`.
+```
 
 ## Todo
 
